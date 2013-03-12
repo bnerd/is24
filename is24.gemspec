@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.version     = Is24::VERSION
   s.authors     = ["Bernd Suenkel"]
   s.email       = ["bernd@bnerd.de"]
-  s.homepage    = "http://bnerd.de"
+  s.homepage    = "http://github.com/bnerd/is24"
   s.summary     = %q{Ruby API Client for Immobilienscout24.}
   s.description = %q{Simple Ruby API Client for Immobilienscout24.}
 
