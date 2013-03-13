@@ -68,11 +68,10 @@ Redirect your user to the redirect_uri to authorize your request.
 
 Once the user has authorized your request you'll receive a get request to your
 callback. Parse the response params and grab your tokens:
-':
 
 ```ruby
 tokens = client.request_access_token(
-  oauth_token: OAUTH_TOKEN
+  oauth_token: OAUTH_TOKEN,
   oauth_token_secret: OAUTH_TOKEN_SECRET,
   oauth_verifier: OAUTH_VERIFIER )
 
@@ -83,9 +82,11 @@ tokens = client.request_access_token(
 # }
 ```
 
-Until the user revokes permission to your app, the access_token is valid for an unlimited time.
+Until the user revokes permission to your app, the access_token is valid for an unlimited time. Store the tokens and reuse them for subsequent calls to restricted resources of the REST API.
 
-Store the tokens and reuse them for subsequent calls to restricted resources of the REST API.
+## TODO
+
+* Error handling ;)
 
 ## Contributing to is24
  
