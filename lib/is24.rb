@@ -59,14 +59,36 @@ module Is24
     def search(options)
       defaults = {
         :channel => "hp",
-        :realestatetype => "housebuy",
+        :realestatetype => ["housebuy"],
         :geocodes => 1276,
         :username => "me"    
       }
       options = defaults.merge(options)
-      
-      response = connection.get("search/region", options )
-      response.body["resultlist.resultlist"]
+      types = options[:realestatetype]
+
+      case types
+        when String
+          types = [types]
+      end
+
+      objects = []
+
+      types.each do |type|
+        options[:realestatetype] = type
+        response = connection.get("search/region", options )
+        if response.status == 200
+          if response.body["resultlist.resultlist"].resultlistEntries[0]['@numberOfHits'] == "0"
+            puts "no results"
+            response.body["resultlist.resultlist"].resultlistEntries[0].resultlistEntries = []
+            puts response.body["resultlist.resultlist"].resultlistEntries[0].resultlistEntries.count
+            puts response.body["resultlist.resultlist"]
+          end
+          puts response.body["resultlist.resultlist"]
+          objects.push response.body["resultlist.resultlist"].resultlistEntries[0]
+        end
+      end
+
+      objects
     end
     
     def expose(id)
