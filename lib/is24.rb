@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'is24/logger'
 require 'faraday'
 require 'faraday_middleware'
@@ -10,6 +12,58 @@ module Is24
 
     API_ENDPOINT = "http://rest.immobilienscout24.de/restapi/api/search/v1.0/"
     API_AUTHORIZATION_ENDPOINT = "http://rest.immobilienscout24.de/restapi/security/"
+
+    # TODO move in separate module
+    MARKETING_TYPES = {
+      "PURCHASE" => "Kauf",
+      "PURCHASE_PER_SQM" => "Kaufpreis/ Quadratmeter",
+      "RENT" => "Miete",
+      "RENT_PER_SQM" => "Mietpreis/ Quadratmeter",
+      "LEASE" => "Leasing",
+      "LEASEHOLD" => "",
+      "BUDGET_RENT" => "",
+      "RENT_AND_BUY" => ""
+    }
+
+    PRICE_INTERVAL_TYPES = {
+      "DAY" => "Tag",
+      "WEEK" => "Woche",
+      "MONTH" => "Monat",
+      "YEAR" => "Jahr",
+      "ONE_TIME_CHARGE" => "einmalig"
+    }
+
+    REAL_ESTATE_TYPES = {
+      "APARTMENT_RENT" => "Wohnung zur Miete",
+      "APARTMENT_BUY" => "Wohnung zum Kauf",
+      "HOUSE_RENT" => "Haus zur Miete",
+      "HOUSE_BUY" => "Haus zum Kauf",
+      "GARAGE_RENT" => "",
+      "GARAGE_BUY" => "",
+      "LIVING_RENT_SITE" => "",
+      "LIVING_BUY_SITE" => "",
+      "TRADE_SITE" => "",
+      "HOUSE_TYPE" => "",
+      "FLAT_SHARE_ROOM" => "",
+      "SENIOR_CARE" => "",
+      "ASSISTED_LIVING" => "",
+      "OFFICE" => "Büros und Praxen",
+      "INDUSTRY" => "",
+      "STORE" => "",
+      "GASTRONOMY" => "",
+      "SPECIAL_PURPOSE" => "",
+      "INVESTMENT" => "",
+      "COMPULSORY_AUCTION" => "",
+      "SHORT_TERM_ACCOMMODATION" => ""
+    }
+
+    def self.format_marketing_type(marketing_type)
+      MARKETING_TYPES[marketing_type] || ""
+    end    
+
+    def self.format_price_interval_type(price_interval_type)
+      PRICE_INTERVAL_TYPES[price_interval_type] || ""
+    end 
 
     def initialize( options = {} )
       logger "Initialized b'nerd IS24 with options #{options}"
