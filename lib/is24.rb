@@ -34,28 +34,42 @@ module Is24
     }
 
     REAL_ESTATE_TYPES = {
-      "APARTMENT_RENT" => "Wohnung zur Miete",
-      "APARTMENT_BUY" => "Wohnung zum Kauf",
-      "HOUSE_RENT" => "Haus zur Miete",
-      "HOUSE_BUY" => "Haus zum Kauf",
-      "GARAGE_RENT" => "",
-      "GARAGE_BUY" => "",
-      "LIVING_RENT_SITE" => "",
-      "LIVING_BUY_SITE" => "",
-      "TRADE_SITE" => "",
-      "HOUSE_TYPE" => "",
-      "FLAT_SHARE_ROOM" => "",
-      "SENIOR_CARE" => "",
-      "ASSISTED_LIVING" => "",
-      "OFFICE" => "Büros und Praxen",
-      "INDUSTRY" => "",
-      "STORE" => "",
-      "GASTRONOMY" => "",
+      "APARTMENT_RENT" => "Wohnung Miete",
+      "APARTMENT_BUY" => "Wohnung Kauf",
+      "HOUSE_RENT" => "Haus Miete",
+      "HOUSE_BUY" => "Haus Kauf",
+      "GARAGE_RENT" => "Garage / Stellplatz Miete",
+      "GARAGE_BUY" => "Garage / Stellplatz Kauf",
+      "LIVING_RENT_SITE" => "Grundstück Wohnen Miete",
+      "LIVING_BUY_SITE" => "Grundstück Wohnen Kauf",
+      "TRADE_SITE" => "Grundstück Gewerbe",
+      "HOUSE_TYPE" => "Typenhäuser",
+      "FLAT_SHARE_ROOM" => "WG-Zimmer",
+      "SENIOR_CARE" => "Altenpflege",
+      "ASSISTED_LIVING" => "Betreutes Wohnen",
+      "OFFICE" => "Büro / Praxis",
+      "INDUSTRY" => "Hallen / Produktion",
+      "STORE" => "Einzelhandel",
+      "GASTRONOMY" => "Gastronomie / Hotel",
       "SPECIAL_PURPOSE" => "",
-      "INVESTMENT" => "",
+      "INVESTMENT" => "Gewerbeprojekte",
       "COMPULSORY_AUCTION" => "",
       "SHORT_TERM_ACCOMMODATION" => ""
     }
+
+    # transforms, eg.
+    # "SPECIAL_PURPOSE" => ""
+    # to
+    # "search:SpecialPurpose" => ""
+    XSI_SEARCH_TYPES = lambda {
+      return Hash[*REAL_ESTATE_TYPES.map{ |v|
+          [
+            "search:"+v.first.downcase.split("_").map!(&:capitalize).join,
+            v[1]
+          ]
+        }.flatten
+      ]
+    }.()
 
     def self.format_marketing_type(marketing_type)
       MARKETING_TYPES[marketing_type] || ""
