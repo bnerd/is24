@@ -78,12 +78,8 @@ module Is24
         response = connection.get("search/region", options )
         if response.status == 200
           if response.body["resultlist.resultlist"].resultlistEntries[0]['@numberOfHits'] == "0"
-            puts "no results"
             response.body["resultlist.resultlist"].resultlistEntries[0].resultlistEntries = []
-            puts response.body["resultlist.resultlist"].resultlistEntries[0].resultlistEntries.count
-            puts response.body["resultlist.resultlist"]
           end
-          puts response.body["resultlist.resultlist"]
           objects.push response.body["resultlist.resultlist"].resultlistEntries[0]
         end
       end
