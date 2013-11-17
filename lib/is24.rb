@@ -167,7 +167,7 @@ module Is24
     
     protected
     
-    def connection(connection_type = :authorization, callback_uri = nil)
+    def connection(connection_type = :default, callback_uri = nil)
     
       # set request defaults
       defaults = {
