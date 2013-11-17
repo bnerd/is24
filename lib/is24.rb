@@ -126,7 +126,7 @@ module Is24
     
     def search(options)
       defaults = {
-        :channel => "is24",
+        :channel => "hp",
         :realestatetype => ["housebuy"],
         :geocodes => 1276,
         :username => "me"    
@@ -157,12 +157,12 @@ module Is24
     
     def expose(id)
       response = connection.get("expose/#{id}")
-      response.body
+      response.body["expose.expose"]
     end
 
     def short_list
-      response = connection.get("searcher/me/shortlist/0")
-      response.body
+      response = connection.get("searcher/me/shortlist/0/entry")
+      response.body["shortlist.shortlistEntries"].first["shortlistEntry"]
     end
     
     protected
