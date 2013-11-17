@@ -157,7 +157,7 @@ module Is24
     
     def expose(id)
       response = connection.get("expose/#{id}")
-      response.body["expose.expose"]
+      response.body
     end
 
     def short_list
