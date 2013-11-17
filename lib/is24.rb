@@ -159,6 +159,11 @@ module Is24
       response = connection.get("expose/#{id}")
       response.body["expose.expose"]
     end
+
+    def short_list
+      response = connection.get("searcher/me/shortlist/0")
+      response.body
+    end
     
     protected
     
