@@ -11,6 +11,7 @@ module Is24
     include Is24::Logger
 
     API_ENDPOINT = "http://rest.immobilienscout24.de/restapi/api/search/v1.0/"
+    API_OFFER_ENDPOINT = "http://rest.immobilienscout24.de/restapi/api/offer/v1.0/"
     API_AUTHORIZATION_ENDPOINT = "http://rest.immobilienscout24.de/restapi/security/"
 
     # TODO move in separate module
@@ -160,6 +161,11 @@ module Is24
       response.body["expose.expose"]
     end
 
+    def list_exposes
+      response = connection(:offer).get("user/me/realestate?publishchannel=IS24")
+      response.body
+    end
+
     def short_list
       response = connection.get("searcher/me/shortlist/0/entry")
       response.body["shortlist.shortlistEntries"].first["shortlistEntry"]
@@ -182,6 +188,11 @@ module Is24
         :url => API_AUTHORIZATION_ENDPOINT
       } ) if connection_type =~ /authorization/i
       
+      defaults.merge!( {
+        :url => API_OFFER_ENDPOINT
+      } ) if connection_type =~ /offer/i
+
+
       # define oauth credentials
       oauth = {
         :consumer_key => @consumer_key, 
