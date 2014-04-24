@@ -74,27 +74,27 @@ module Is24
 
     def self.format_marketing_type(marketing_type)
       MARKETING_TYPES[marketing_type] || ""
-    end    
+    end
 
     def self.format_price_interval_type(price_interval_type)
       PRICE_INTERVAL_TYPES[price_interval_type] || ""
-    end 
+    end
 
     def initialize( options = {} )
       logger "Initialized b'nerd IS24 with options #{options}"
-      
+
       @token = options[:token] || nil
       @secret = options[:secret] || nil
       @consumer_secret = options[:consumer_secret] || nil
       @consumer_key = options[:consumer_key] || nil
-      
+
       raise "Missing Credentials!" if @consumer_secret.nil? || @consumer_key.nil?
     end
-    
+
     def request_token( callback_uri )
       # TODO error handling
       response = connection(:authorization, callback_uri).get("oauth/request_token")
-      
+
       body = response.body.split('&')
       response = {
         :oauth_token => CGI::unescape(body[0].split("=")[1]),
@@ -111,26 +111,26 @@ module Is24
 
       response = connection(:authorization).get("oauth/access_token")
       body = response.body.split('&')
-      
+
       response = {
         :oauth_token => body[0].split('=')[1],
         :oauth_token_secret => CGI::unescape(body[1].split('=')[1]),
       }
-      
+
       # set credentials in client
       @token = response[:oauth_token]
       @token_secret = response[:oauth_token_secret]
-      
+
       # return access token and secret
       response
     end
-    
+
     def search(options)
       defaults = {
         :channel => "hp",
         :realestatetype => ["housebuy"],
         :geocodes => 1276,
-        :username => "me"    
+        :username => "me"
       }
       options = defaults.merge(options)
       types = options[:realestatetype]
@@ -155,7 +155,7 @@ module Is24
 
       objects
     end
-    
+
     def expose(id)
       response = connection.get("expose/#{id}")
       response.body["expose.expose"]
@@ -170,24 +170,23 @@ module Is24
       response = connection.get("searcher/me/shortlist/0/entry")
       response.body["shortlist.shortlistEntries"].first["shortlistEntry"]
     end
-    
+
     protected
-    
+
     def connection(connection_type = :default, callback_uri = nil)
-    
+
       # set request defaults
       defaults = {
         :url => API_ENDPOINT,
-        :accept =>  'application/json',
         :headers => {
           :accept =>  'application/json',
-          :user_agent => 'b\'nerd .media IS24 Ruby Client'}      
+          :user_agent => 'b\'nerd .media IS24 Ruby Client'}
       }
-      
+
       defaults.merge!( {
         :url => API_AUTHORIZATION_ENDPOINT
       } ) if connection_type =~ /authorization/i
-      
+
       defaults.merge!( {
         :url => API_OFFER_ENDPOINT
       } ) if connection_type =~ /offer/i
@@ -195,22 +194,22 @@ module Is24
 
       # define oauth credentials
       oauth = {
-        :consumer_key => @consumer_key, 
-        :consumer_secret => @consumer_secret, 
-        :token => @token, 
+        :consumer_key => @consumer_key,
+        :consumer_secret => @consumer_secret,
+        :token => @token,
         :token_secret => @secret
       }
-      
+
       # merge callback_uri if present
       oauth.merge!( {
         :callback => callback_uri
       } ) if connection_type =~ /authorization/i && callback_uri
-      
+
       # merge verifier if present
       oauth.merge!( {
         :verifier => @oauth_verifier
       } ) if connection_type =~ /authorization/i && @oauth_verifier
-      
+
       Faraday::Connection.new( defaults ) do |builder|
             builder.request :oauth, oauth
             builder.response :mashify
@@ -218,6 +217,6 @@ module Is24
             builder.adapter Faraday.default_adapter
           end
     end
-    
+
   end
-end  
+end
